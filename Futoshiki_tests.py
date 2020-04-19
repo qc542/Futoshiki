@@ -1,0 +1,3 @@
+from Futoshiki import *
+
+
