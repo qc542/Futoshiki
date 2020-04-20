@@ -103,7 +103,7 @@ def load_input(filename: str) -> list:
     cells."""
 
     for i in range(0, 5):
-        line = list(map(int, text_stream.readline().rstrip().split(' ')))
+        line = list(map(str, text_stream.readline().rstrip().split(' ')))
         """ The functions and methods used in this line are 
         identical to the ones in the previous for loop. "line"
         is a list of the four characters that represent the 
@@ -157,7 +157,8 @@ def load_input(filename: str) -> list:
     for i in range(0, 4):
         # range = (0,4) because this part of the input file contains 
         # only four rows
-        line = list(map(int, text_stream.readline().rstrip().split(' ')))
+        
+        line = list(map(str, text_stream.readline().rstrip().split(' ')))
         # Contains the same methods as previously explained
         # "line" is a list that contains the four characters that 
         # represent the constraints in a column
@@ -167,8 +168,8 @@ def load_input(filename: str) -> list:
             # characters in each line of this part of the input
 
             if line[j] == '0':
-                constr[i][j][1] == "None"
-                constr[i+1][j][0] == "None"
+                constr[i][j][1] = "None"
+                constr[i+1][j][0] = "None"
                 """ 0 indicates there's no constraint, so the second 
                 element of the cell (i, j), which refers to its 
                 relation with the cell underneath it, should be 
@@ -176,14 +177,14 @@ def load_input(filename: str) -> list:
                 of the cell (i+1, j) should be "None" as well."""
 
             elif line[j] == '^':
-                constr[i][j][1] == "STD"
-                constr[i+1][j][0] == "GTU"
+                constr[i][j][1] = "STD"
+                constr[i+1][j][0] = "GTU"
                 # STD = Smaller Than Down
                 # GTU = Greater Than Up
 
             elif line[j] == 'v':
-                constr[i][j][1] == "GTD"
-                constr[i+1][j][0] == "STU"
+                constr[i][j][1] = "GTD"
+                constr[i+1][j][0] = "STU"
                 # GTD = Greater Than Down
                 # STU = Smaller Than Up
 
