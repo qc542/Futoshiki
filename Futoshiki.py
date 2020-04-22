@@ -23,10 +23,17 @@ class Cell:
 
 
 class Board:
-    def __init__(self, all_cells: list):
+    def __init__(self, all_cells: list, all_constr: list):
         self.cells = all_cells
         # All twenty-five cells on the board, represented as
         # a five-by-five list
+
+        self.constr = all_constr
+        # All constraints of all twenty-five cells, represented as
+        # a five-by-five-by-four list
+        # The constraints of an individual cell is represented as
+        # a list of four strings, each of which indicates the constraint 
+        # regarding one of the four neighbors
 
 
 def load_input(filename: str) -> list:
