@@ -42,7 +42,7 @@ def initialize_board_test() -> int:
     for i in range(0,5):
         print("Row " + str(i) + ": \n")
         for j in range(0,5):
-            a_cell = a_board.all_cells[i][j]
+            a_cell = a_board.cells[i][j]
             print("Cell coordinates: " + str(a_cell.coord) + '\n')
             print("Assignment: " + str(a_cell.assign) + '\n')
             print("Domain: " + str(a_cell.domain) + '\n')
