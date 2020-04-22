@@ -33,6 +33,8 @@ def load_input_test() -> int:
 
 
 def initialize_board_test() -> int:
+    """ Tests the instantiation of both the Board class and the 
+    Cell class, since initialize_board uses both."""
 
     [initial_state, constr] = load_input("input1.txt")
     a_board = initialize_board(initial_state, constr)
