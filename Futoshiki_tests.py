@@ -32,17 +32,4 @@ def load_input_test() -> int:
     return 0
 
 
-def initialize_domains_test() -> int:
-    """ Prints the list of domains returned by initialize_domains()."""
-
-    domains = initialize_domains()
-    for i in range(len(domains)):
-        print("Row " + str(i+1) + ": ")
-        print(domains[i])
-        print('\n')
-
-    return 0
-
-
 load_input_test()
-initialize_domains_test()
