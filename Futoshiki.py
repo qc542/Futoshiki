@@ -2,6 +2,10 @@ import io
 import copy
 
 def load_input(filename: str) -> list:
+    """ Given the name of the input file, the function reads the file line by 
+    line and builds the data structures for the initial state as well as the 
+    constraints of inequality."""
+    
     text_stream = io.open(filename, 'r', encoding='utf-8', errors='ignore', newline='\n')
     """ Calls Python's io function to read the file with the specified name."""
 
@@ -195,5 +199,31 @@ def load_input(filename: str) -> list:
     # Returns the two lists that represent the initial state and 
     # all constraints, respectively
     return ret
+
+
+def initialize_domains() -> list:
+    """ Returns a list that contains the initial domain of each & every cell. 
+    "initial" denotes the function assumes none of the cells has been 
+    assigned a value. Forward checking will be conducted later to take into 
+    account the existing assignment in the initial state and reduce the 
+    domains of all other cells accordingly."""
+
+    domains = []
+    for i in range(0,5):
+        a_row = []
+        for j in range(0,5):
+            a_row.append([1, 2, 3, 4, 5])
+
+        domains.append(a_row)
+
+    """ "domains" contains five lists, each of which represents one of the 
+    rows on the board. Each of the five lists contains another five lists, 
+    which represents an individual cell in a row. The list contains the 
+    integers from one up to and including five, which is the initial 
+    domain for every cell."""
+
+    return domains
+
+
 
 
