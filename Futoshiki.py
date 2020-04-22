@@ -36,6 +36,43 @@ class Board:
         # regarding one of the four neighbors
 
 
+    def go_left(origin: Cell) -> Cell:
+        row = origin.coord[0]
+        col = origin.coord[1] - 1
+        if (0 <= col <= 4):
+            return self.cells[row[col]]
+        else:
+            raise ValueError()
+
+        
+    def go_right(origin: Cell) -> Cell:
+        row = origin.coord[0]
+        col = origin.coord[1] + 1
+        if (0 <= col <= 4):
+            return self.cells[row[col]]
+        else:
+            raise ValueError()
+
+
+    def go_up(origin: Cell) -> Cell:
+        row = origin.coord[0] + 1
+        col = origin.coord[1]
+        if (0 <= row <= 4):
+            return self.cells[row[col]]
+        else:
+            raise ValueError()
+
+
+    def go_down(origin: Cell) -> Cell:
+        row = origin.coord[0] - 1
+        col = origin.coord[1]
+        if (0 <= row <= 4):
+            return self.cells[row[col]]
+        else:
+            raise ValueError()
+
+
+
 def load_input(filename: str) -> list:
     """ Given the name of the input file, the function reads the file line by 
     line and builds the data structures for the initial state as well as the 
@@ -272,4 +309,13 @@ def initialize_board(initial_state: list, constr: list) -> Board:
     # contains all twenty-five cells
 
     return Board(all_cells, constr)
+
+
+def forward_checking(a_cell: Cell) -> int:
+    """ Conducts forward checking for the given assigned cell to 
+    ensure there's no other cell in the same row or column with 
+    the same assignment. Also """
+
+
+
 
