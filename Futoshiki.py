@@ -1,6 +1,21 @@
 import io
 import copy
 
+
+class Cell:
+    def __init__(self, coord: tuple, assign: int, domain: list):
+        self.coord = coord
+        # The coordinates of the cell represented as a tuple
+        # e.g. (2, 3) denotes Row 2, Column 3
+        # Row and column numbers range from 0~4 (inclusive)
+
+        self.assign = assign
+        # The value assigned to the cell, if any
+        # = None if the cell is unassigned
+
+        self.domain = domain
+        # Represented as a list of integers
+
 def load_input(filename: str) -> list:
     """ Given the name of the input file, the function reads the file line by 
     line and builds the data structures for the initial state as well as the 
