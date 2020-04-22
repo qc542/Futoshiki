@@ -35,14 +35,22 @@ class Board:
         # a list of four strings, each of which indicates the constraint 
         # regarding one of the four neighbors
 
-
+    """ The following are four methods that, when given one of the Cell 
+    objects on the board, return one of its neighbors. If moving in 
+    the particular direction (left, right, etc.) goes beyond the 
+    boundaries of the board, each of the methods raises a ValueError."""    
     def go_left(self, origin: Cell) -> Cell:
         row = origin.coord[0]
         col = origin.coord[1] - 1
         if (0 <= col <= 4):
             return self.cells[row][col]
+            # If the move is within the boundaries of the board,
+            # return the destination as a Cell object
+
         else:
             raise ValueError()
+            # ValueError will be caught by the function that calls
+            # this method
 
         
     def go_right(self, origin: Cell) -> Cell:
