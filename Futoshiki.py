@@ -243,11 +243,13 @@ def initialize_board(initial_state: list, constr: list) -> Board:
     a Board object."""
 
     all_cells = []
+    # Will become a five-by-five list by the end of function
     # All Cell objects to be instantiated will be appended 
     # to this list, which is then used to instantiate the 
     # Board object
 
     for i in range(0,5):
+        a_row = []
         for j in range(0,5):
             assign = initial_state[i][j]
             domain = [1, 2, 3, 4, 5]
@@ -260,8 +262,14 @@ def initialize_board(initial_state: list, constr: list) -> Board:
                 domain = None
                 # Domain doesn't apply to assigned cells
 
-            all_cells.append(Cell((i, j), assign, domain, constr[i][j]))
-            # Instantiates the Cell object and appends it to the list
+            a_row.append(Cell((i, j), assign, domain, constr[i][j]))
+            # Instantiates the Cell object and appends it to the 
+            # list of the row
+
+        all_cells.append(a_row)
+
+    # At this point all_cells is a five-by-five list that 
+    # contains all twenty-five cells
 
     return Board(all_cells, constr)
 
