@@ -3,7 +3,8 @@ import copy
 
 
 class Cell:
-    def __init__(self, coord: tuple, assign: int, domain: list):
+    def __init__(self, coord: tuple, assign: int, domain: list,
+            constr: list):
         self.coord = coord
         # The coordinates of the cell represented as a tuple
         # e.g. (2, 3) denotes Row 2, Column 3
@@ -15,6 +16,12 @@ class Cell:
 
         self.domain = domain
         # Represented as a list of integers
+
+        self.constr = constr
+        # Constraints of inequality on the cell, represented as
+        # a list of strings
+
+
 
 def load_input(filename: str) -> list:
     """ Given the name of the input file, the function reads the file line by 
