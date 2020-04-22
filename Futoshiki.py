@@ -22,6 +22,12 @@ class Cell:
         # a list of strings
 
 
+class Board:
+    def __init__(self, all_cells: list):
+        self.cells = all_cells
+        # All twenty-five cells on the board, represented as
+        # a five-by-five list
+
 
 def load_input(filename: str) -> list:
     """ Given the name of the input file, the function reads the file line by 
