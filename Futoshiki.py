@@ -236,29 +236,32 @@ def load_input(filename: str) -> list:
     return ret
 
 
-def initialize_domains() -> list:
-    """ Returns a list that contains the initial domain of each & every cell. 
-    "initial" denotes the function assumes none of the cells has been 
-    assigned a value. Forward checking will be conducted later to take into 
-    account the existing assignment in the initial state and reduce the 
-    domains of all other cells accordingly."""
+def initialize_board(initial_state: list, constr: list) -> Board:
+    """ The parameters are the initial state, represented as a five-by-five 
+    list, and the list of constraints for all twenty-five cells. The function 
+    instantiates twenty-five Cell objects with the given data and returns 
+    a Board object."""
 
-    domains = []
+    all_cells = []
+    # All Cell objects to be instantiated will be appended 
+    # to this list, which is then used to instantiate the 
+    # Board object
+
     for i in range(0,5):
-        a_row = []
         for j in range(0,5):
-            a_row.append([1, 2, 3, 4, 5])
+            assign = initial_state[i][j]
+            domain = [1, 2, 3, 4, 5]
+            # The initial domain of an empty cell
 
-        domains.append(a_row)
+            if assign == 0:
+                assign = None
+                # Zero indicates an empty cell
+            else:
+                domain = None
+                # Domain doesn't apply to assigned cells
 
-    """ "domains" contains five lists, each of which represents one of the 
-    rows on the board. Each of the five lists contains another five lists, 
-    which represents an individual cell in a row. The list contains the 
-    integers from one up to and including five, which is the initial 
-    domain for every cell."""
+            all_cells.append(Cell((i, j), assign, domain, constr[i][j]))
+            # Instantiates the Cell object and appends it to the list
 
-    return domains
-
-
-
+    return Board(all_cells, constr)
 
