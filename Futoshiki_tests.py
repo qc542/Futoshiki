@@ -62,7 +62,7 @@ def board_moves_test(a_board: Board) -> int:
 
     for i in range(0, 5):
         for j in range(0, 5):
-            origin = Cell((row, col), None, None, None))
+            origin = Cell((i, j), None, None, None)
             print("Origin: " + str(origin.coord) + '\n')
 
             try:

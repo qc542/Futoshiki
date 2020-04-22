@@ -36,41 +36,40 @@ class Board:
         # regarding one of the four neighbors
 
 
-    def go_left(origin: Cell) -> Cell:
+    def go_left(self, origin: Cell) -> Cell:
         row = origin.coord[0]
         col = origin.coord[1] - 1
         if (0 <= col <= 4):
-            return self.cells[row[col]]
+            return self.cells[row][col]
         else:
             raise ValueError()
 
         
-    def go_right(origin: Cell) -> Cell:
+    def go_right(self, origin: Cell) -> Cell:
         row = origin.coord[0]
         col = origin.coord[1] + 1
         if (0 <= col <= 4):
-            return self.cells[row[col]]
+            return self.cells[row][col]
         else:
             raise ValueError()
 
 
-    def go_up(origin: Cell) -> Cell:
-        row = origin.coord[0] + 1
-        col = origin.coord[1]
-        if (0 <= row <= 4):
-            return self.cells[row[col]]
-        else:
-            raise ValueError()
-
-
-    def go_down(origin: Cell) -> Cell:
+    def go_up(self, origin: Cell) -> Cell:
         row = origin.coord[0] - 1
         col = origin.coord[1]
         if (0 <= row <= 4):
-            return self.cells[row[col]]
+            return self.cells[row][col]
         else:
             raise ValueError()
 
+
+    def go_down(self, origin: Cell) -> Cell:
+        row = origin.coord[0] + 1
+        col = origin.coord[1]
+        if (0 <= row <= 4):
+            return self.cells[row][col]
+        else:
+            raise ValueError()
 
 
 def load_input(filename: str) -> list:
