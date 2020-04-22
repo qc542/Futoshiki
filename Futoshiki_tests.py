@@ -1,4 +1,6 @@
 from Futoshiki import *
+import random
+
 
 def load_input_test() -> int:
     [initial_state, constr] = load_input("input1.txt")
@@ -54,5 +56,45 @@ def initialize_board_test() -> int:
     return 0
 
 
-load_input_test()
-initialize_board_test()
+def board_moves_test(a_board: Board) -> int:
+    """ Tests the four methods of the Board class that are for locating a 
+    given cell's neighbors: go_up, go_down, go_left and go_right."""
+
+    for i in range(0, 5):
+        for j in range(0, 5):
+            origin = Cell((row, col), None, None, None))
+            print("Origin: " + str(origin.coord) + '\n')
+
+            try:
+                left = a_board.go_left(origin)
+                print("To the left: " + str(left.coord) + '\n')
+            except ValueError:
+                print("No cell exists to the left of the origin.\n")
+
+            try:
+                right = a_board.go_right(origin)
+                print("To the right: " + str(right.coord) + '\n')
+            except ValueError:
+                print("No cell exists to the right of the origin.\n")
+
+            try:
+                up = a_board.go_up(origin)
+                print("Above: " + str(up.coord) + '\n')
+            except ValueError:
+                print("No cell exists above the origin.\n")
+
+            try:
+                down = a_board.go_down(origin)
+                print("Below: " + str(down.coord) + '\n')
+            except ValueError:
+                print("No cell exists below the origin.\n")
+
+            print('\n')
+
+    return 0
+
+#load_input_test()
+#initialize_board_test()
+[initial_state, constr] = load_input("input1.txt")
+a_board = initialize_board(initial_state, constr)
+board_moves_test(a_board)
