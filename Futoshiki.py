@@ -321,7 +321,10 @@ def initialize_board(initial_state: list, constr: list) -> Board:
 def forward_checking(a_board: Board, a_cell: Cell) -> int:
     """ Conducts forward checking for the given assigned cell to 
     ensure there's no other cell in the same row or column with 
-    the same assignment. Also """
+    the same assignment. Also reduces each neighbor's domain to 
+    comply with the constraints, if any. Recursive calls to 
+    itself are made to eventually check every cell on the board 
+    for arc consistency."""
 
     """ The four methods of the Board class--go_up, go_down, go_left 
     and go_right--all throw a ValueError when the move goes beyond 
