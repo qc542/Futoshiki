@@ -474,7 +474,7 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
             if len(up.domain) == 0:
                 return 1
         
-        up_ret = forward_checking(right)
+        up_ret = forward_checking(up)
         """ This line is executed if the neighbor has been assigned 
         a value or the neighbor's domain is not empty after the 
         reduction."""
@@ -508,7 +508,7 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
             if len(down.domain) == 0:
                 return 1
         
-        down_ret = forward_checking(right)
+        down_ret = forward_checking(down)
         """ This line is executed if the neighbor has been assigned 
         a value or the neighbor's domain is not empty after the 
         reduction."""
