@@ -334,6 +334,15 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
     as a Cell object, and the corresponding variable (left, right 
     etc.) is turned into a reference (shallow copy) to that Cell."""
 
+    if a_cell.domain == 0:
+        return 1
+    # Some of the recursive calls may encounter cases where the 
+    # domain of the origin cell has been reduced to none, which 
+    # indicates that there's no solution and that the program 
+    # should halt. This if statement is written at the very 
+    # beginning so that the recursive call could be termianted 
+    # immediately if this were the case.
+
     try:
         left = a_board.go_left(a_cell)
     except ValueError:
@@ -354,171 +363,139 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
     except ValueError:
         down = None
 
-    left_ret = 0
-    right_ret = 0
-    up_ret = 0
-    down_ret = 0
-    # Point is to initialize these variables. If the recursive 
+    neighbors = [up, down, left, right]
+    # The Cell objects in the list are arranged in the same order
+    # as the constraint field of the Cell class (which stores 
+    # the strings that represent the constraints regarding the
+    # cell's neighbors): the neighbor above ("up"), below ("down"),
+    # left and then right
+
+    ret_vals = [up_ret, down_ret, left_ret, right_ret]
+    # The variables to store the return values are arranged in 
+    # the same order as the list of Cell objects above: up, 
+    # down, left and right
+
+    for val in ret_vals:
+        val = 0
+    # The point is to initialize these variables. If the recursive 
     # calls in the code below are executed, these variables 
     # will hold the return values of those calls
 
-    if type(left) != None:
-        # If the Cell object looked for was returned
+    constr_strings = [["STU", "GTU"], ["STD", "GTD"],
+            ["STL", "GTL"], ["STR", "GTR"]]
+    # A list that contains all the strings that represent 
+    # constraints regarding neighbors.
+    # Arranged in the same order as the list of Cell objects 
+    # above: the first sublist contains the two types of 
+    # constraints for the neighbor above, the second sublist 
+    # is for the neighbor below, followed by those for "left"
+    # and "right"
 
-        if left.assign == None:
-            # If the cell is empty, the indented code below will 
-            # be run;
-            # If the cell has been assigned a value, the program 
-            # will jump to the recursive call ahead
+    for i in range(len(neighbors)):
+        if type(neighbors[i]) != None:
+            # If the Cell object looked for was returned by
+            # the methods of the Board class
 
-            if a_cell.constr[2] == "STL":
-                # a_cell.constr[2] is the constraint regarding the 
-                # cell's neighbor on the left
-                # "STL" = "Smaller Than Left", as defined earlier
-                # Other inequalities are named in a similar fashion
+            if neighbors[i].assign == None:
+                # If the cell is empty, the indented code below 
+                # will be run;
+                # If the cell has been assigned a value, 
+                # the program will jump to the recursive call ahead
 
-                for i in range(len(left.domain)):
-                    if left.domain[i] >= a_cell.assign:
-                        left.domain.pop(i)
-                        # Remove the values that violate the constraint
+                if a_cell.constr[i] == constr_strings[i][0]:
+                # The list of Cell objects, the list of constraint 
+                # strings and the list of return values all arrange 
+                # their elements in the up-down-left-right order
+                # Therefore the same index can locate the particular 
+                # element for the same neighboring cell
+                
+                # The elements in constr_strings are ordered in such
+                # a way that constr_strings[i][0] is always the string 
+                # that denotes a "smaller than" relation, whereas
+                # constr_strings[i][1] is the one that denotes a
+                # "greater than" relation
 
-            elif a_cell.constr[2] == "GTL":
-                for i in range(len(left.domain)):
-                    if left.domain[i] <= a_cell.assign:
-                        left.domain.pop(i)
+                    if a_cell.assign != None:
+                        # If the origin cell has been assigned
+                        # a value
 
-            else:
-                # The case where there's no constraint regarding
-                # this neighbor
+                        for j in range(len(neighbors[i].domain)):
+                            if neighbors[i].domain[j] <= a_cell.assign:
+                                neighbors[i].domain.pop(j)
+                                # Remove the values that are smaller 
+                                # than or equal to the origin's 
+                                # assigned value
+                    
+                    else:
+                        # If the origin cell has NOT been assigned 
+                        # a value
 
-                left.domain.remove(a_cell.assign)
-                # Only remove the origin cell's assigned value,
-                # since the same number can only show up once
-                # in any row or column
+                        # The domain list cannot possibly be empty 
+                        # because an empty domain would've made the 
+                        # function return 1 in the very beginning
+                        
+                        dom_min = min(a_cell.domain)
+                        for j in range(len(neighbors[i].domain)):
+                            if neighbors[i].domain[j] <= dom_min:
+                                neighbors[i].domain.pop(j)
+                                # Remove the values that are smaller 
+                                # than or equal to the smallest value 
+                                # in the origin's domain
 
-            if len(left.domain) == 0:
-                return 1
-                # If an empty cell's domain has been reduced to none,
-                # return 1, which indicates the puzzle has no solution
-                # The return value will be caught by the function 
-                # that makes the call, which will then stop the program
+                elif a_cell.constr[i] == constr_strings[i][1]:
+                    # constr_strings[i][1] is always the string that
+                    # refers to a "greater than" relation
 
+                    if a_cell.assign != None:
+                        for j in range(len(neighbors[i].domain)):
+                            if neighbors[i].domain[j] >= a_cell.assign:
+                                neighbors[i].domain.pop[j]
 
-        left_ret = forward_checking(left)
-        """ This line is executed if the neighbor has been assigned 
-        a value or the neighbor's domain is not empty after the 
-        reduction."""
+                    else:
+                        dom_max = max(a_cell.domain)
+                        for j in range(len(neighbors[i].domain)):
+                            if neighbors[i].domain[j] >= dom_max:
+                                neighbors[i].domain.pop(j)
+
+                else:
+                    # The case where there's no constraint regarding
+                    # this neighbor
+
+                    if a_cell.assign != None:
+                        neighbors[i].domain.remove(a_cell.assign)
+                        # If the origin cell has been assigned a value,
+                        # remove that value from the neighbor's domain,
+                        # since the same number can only show up once 
+                        # in any row or column
+                        # If the origin cell has NOT been assigned a
+                        # value, no action needs to be taken. In the 
+                        # recursive calls, the origin cell may not have 
+                        # been assigned a value.
+
+                if len(neighbors[i].domain) == 0:
+                    return 1
+                    # If an empty cell's domain has been reduced to none,
+                    # return 1, which indicates the puzzle has no solution
+                    # The return value will be caught by the function 
+                    # that makes the call, which will then stop the program
+
+                    # The domain field of a Cell is "None" only if the Cell
+                    # has not been assigned a value, in which case the 
+                    # entire code block will have been skipped due to the 
+                    # "if neighbors[i].assign == None" statement above.
+                    # Therefore this line does not incur a runtime error.
+
+            return_vals[i] = forward_checking(neighbors[i])
+            """ This line is executed if the neighbor has been assigned 
+            a value or the neighbor's domain is not empty after the 
+            reduction."""
        
-
-    if type(right) != None:
-        # Construct of this block is similar to the one above
-        # Only difference being that the neighbor is on the right
-
-        if right.assign == None:
-            if a_cell.constr[3] == "STR":
-                # a_cell.constr[3] is the constraint regarding the 
-                # cell's neighbor on the right
-                # "STR" = "Smaller Than Right", as defined earlier
-                # Other inequalities are named in a similar fashion
-
-                for i in range(len(right.domain)):
-                    if right.domain[i] >= a_cell.assign:
-                        right.domain.pop(i)
-                        # Remove the values that violate the constraint
-
-            elif a_cell.constr[3] == "GTR":
-                for i in range(len(right.domain)):
-                    if right.domain[i] <= a_cell.assign:
-                        right.domain.pop(i)
-
-            else:
-                # The case where there's no constraint regarding
-                # this neighbor
-                right.domain.remove(a_cell.assign)
-
-            if len(right.domain) == 0:
-                return 1
-        
-        right_ret = forward_checking(right)
-        """ This line is executed if the neighbor has been assigned 
-        a value or the neighbor's domain is not empty after the 
-        reduction."""
-
-
-
-    if type(up) != None:
-        # Construct of this block is similar to the one above
-        # Only difference being that the neighbor is above
-
-        if up.assign == None:
-            if a_cell.constr[0] == "STU":
-                # a_cell.constr[0] is the constraint regarding the 
-                # cell's neighbor above
-                # "STU" = "Smaller Than Up", as defined earlier
-                # Other inequalities are named in a similar fashion
-
-                for i in range(len(up.domain)):
-                    if up.domain[i] >= a_cell.assign:
-                        up.domain.pop(i)
-
-            elif a_cell.constr[0] == "GTU":
-                for i in range(len(up.domain)):
-                    if up.domain[i] <= a_cell.assign:
-                        up.domain.pop(i)
-
-            else:
-                # The case where there's no constraint regarding
-                # this neighbor
-                up.domain.remove(a_cell.assign)
-
-            if len(up.domain) == 0:
-                return 1
-        
-        up_ret = forward_checking(up)
-        """ This line is executed if the neighbor has been assigned 
-        a value or the neighbor's domain is not empty after the 
-        reduction."""
-
-
-    if type(down) != None:
-        # Construct of this block is similar to the one above
-        # Only difference being that the neighbor is below
-
-        if down.assign == None:
-            if a_cell.constr[1] == "STD":
-                # a_cell.constr[1] is the constraint regarding the 
-                # cell's neighbor below
-                # "STD" = "Smaller Than Down", as defined earlier
-                # Other inequalities are named in a similar fashion
-
-                for i in range(len(down.domain)):
-                    if down.domain[i] >= a_cell.assign:
-                        down.domain.pop(i)
-
-            elif a_cell.constr[0] == "GTD":
-                for i in range(len(down.domain)):
-                    if down.domain[i] <= a_cell.assign:
-                        down.domain.pop(i)
-
-            else:
-                # The case where there's no constraint regarding
-                # this neighbor
-                down.domain.remove(a_cell.assign)
-
-            if len(down.domain) == 0:
-                return 1
-        
-        down_ret = forward_checking(down)
-        """ This line is executed if the neighbor has been assigned 
-        a value or the neighbor's domain is not empty after the 
-        reduction."""
-
-    return max(left_ret, right_ret, up_ret, down_ret)
+    return max(return_vals)
     """ If any of the recursive calls returns one, there's no solution 
-    to the puzzle. If any of the four variables equals one, the 
-    function will return one. The preceding function that made the 
-    first call to forward_checking will stop the program if the return 
-    value is one and continue if it's zero."""
+    to the puzzle. If any of the four elements of "return_vals" equals 
+    one, the function will return one. The preceding function that made 
+    the first call to forward_checking will stop the program if the 
+    return value is one and continue if it's zero."""
 
 
 
