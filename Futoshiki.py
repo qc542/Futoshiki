@@ -462,7 +462,9 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
                     # this neighbor
 
                     if a_cell.assign != None:
-                        neighbors[i].domain.remove(a_cell.assign)
+                        for j in range(len(neighbors[i].domain)):
+                            if neighbors[i].domain[j] == a_cell.assign:
+                                neighbors[i].domain.remove(a_cell.assign);
                         # If the origin cell has been assigned a value,
                         # remove that value from the neighbor's domain,
                         # since the same number can only show up once 
