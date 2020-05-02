@@ -394,9 +394,11 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
     # and "right"
 
     for i in range(len(neighbors)):
-        if type(neighbors[i]) != None:
+        if isinstance(neighbors[i], Cell):
             # If the Cell object looked for was returned by
             # the methods of the Board class
+            # Python's isinstance function returns True when 
+            # the first parameter is an instance of the second
 
             if neighbors[i].assign == None:
                 # If the cell is empty, the indented code below 
