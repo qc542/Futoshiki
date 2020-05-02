@@ -93,8 +93,65 @@ def board_moves_test(a_board: Board) -> int:
 
     return 0
 
+
+def print_board(a_board: Board) -> int:
+    """ Given a Board object as the parameter, the function prints 
+    out all the cells on the board one by one in an easy-to-read 
+    format. In hindsight, I wrote this function without being 
+    aware that it's almost identical to initialize_board_test. 
+    Regardless, I decided to keep them both; this function was 
+    named for a more general purpose and therefore will be called 
+    more often than initialize_board_test."""
+
+    for a_row in range(len(a_board.cells)):
+        for a_column in range(len(a_board.cells[a_row])):
+            print("Cell coordinates: Row " + str(a_row) + ", Column " 
+                    + str(a_column))
+            cell = a_board.cells[a_row][a_column]
+            print("Assigned value: " + str(cell.assign))
+            print("Domain: " + str(cell.domain))
+            print("Constraints: " + str(cell.constr))
+            print('\n', end = '')
+            """ Python 3 automatically adds a newline character to 
+            each call to print(). Therefore, to print only one empty 
+            line, add "end = ''" as the second argument."""
+
+    print("All cells on the board have been printed.")
+    print("*****************************************************")
+    return 0
+
+def forward_checking_test(a_board: Board) -> int:
+    """ The function takes a Board object as the parameter and looks for 
+    the first cell on the board that has been assigned a value."""
+    for a_row in range(len(a_board.cells)):
+        for a_column in range(len(a_board.cells[a_row])):
+            if a_board.cells[a_row][a_column].assign > 0:
+                origin = a_board.cells[a_row][a_column]
+                break
+
+    failure = forward_checking(origin)
+    if not failure:
+        print("The function forward_checking returned 0. Forward \
+        checking was conducted succesfully. The board following the \
+        completion of forward checking is shown below: \n")
+
+
+
+    else:
+        print("The function forward_checking returned 1. There is \
+        at least one cell on the board whose domain has been \
+        reduced to none. Therefore there is no solution to this \
+        puzzle.\n")
+
+
+
+
+
 #load_input_test()
 #initialize_board_test()
 [initial_state, constr] = load_input("input1.txt")
 a_board = initialize_board(initial_state, constr)
-board_moves_test(a_board)
+#board_moves_test(a_board)
+#fct_ret = forward_checking_test(a_board)
+#print("The function forward_checking_test returned " + str(fct_ret) + '\n')
+print_board(a_board)
