@@ -491,7 +491,7 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
                     # "if neighbors[i].assign == None" statement above.
                     # Therefore this line does not incur a runtime error.
 
-            return_vals[i] = forward_checking(neighbors[i])
+            return_vals[i] = forward_checking(a_board, neighbors[i])
             """ This line is executed if the neighbor has been assigned 
             a value or the neighbor's domain is not empty after the 
             reduction."""
