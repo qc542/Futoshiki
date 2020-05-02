@@ -135,18 +135,20 @@ def forward_checking_test(a_board: Board) -> int:
                 origin = a_board.cells[a_row][a_column]
                 break
 
-    failure = forward_checking(a_board, origin)
+    explored = set()
+    failure = forward_checking(a_board, origin, explored)
     if not failure:
-        print("The function forward_checking returned 0. Forward \
-        checking was conducted succesfully. The board following the \
-        completion of forward checking is shown below: \n")
+        print("The function forward_checking returned 0. " + 
+                "Forward checking was conducted succesfully. " + 
+                "The board following the completion of forward " + 
+                "checking is shown below: """, end = "\n\n")
         print_board(a_board)
 
     else:
-        print("The function forward_checking returned 1. There is \
-        at least one cell on the board whose domain has been \
-        reduced to none. Therefore there is no solution to this \
-        puzzle.\n")
+        print("The function forward_checking returned 1. There " + 
+                "is at least one cell on the board whose domain " + 
+                "has been reduced to none. Therefore there is no " + 
+                "solution to this puzzle.")
 
     return 0
 
