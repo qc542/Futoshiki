@@ -131,11 +131,11 @@ def forward_checking_test(a_board: Board) -> int:
 
     for a_row in range(len(a_board.cells)):
         for a_column in range(len(a_board.cells[a_row])):
-            if a_board.cells[a_row][a_column].assign > 0:
+            if a_board.cells[a_row][a_column].assign != None:
                 origin = a_board.cells[a_row][a_column]
                 break
 
-    failure = forward_checking(origin)
+    failure = forward_checking(a_board, origin)
     if not failure:
         print("The function forward_checking returned 0. Forward \
         checking was conducted succesfully. The board following the \
@@ -156,6 +156,6 @@ def forward_checking_test(a_board: Board) -> int:
 [initial_state, constr] = load_input("input1.txt")
 a_board = initialize_board(initial_state, constr)
 #board_moves_test(a_board)
-#fct_ret = forward_checking_test(a_board)
-#print("The function forward_checking_test returned " + str(fct_ret) + '\n')
-print_board(a_board)
+fct_ret = forward_checking_test(a_board)
+print("The function forward_checking_test returned " + str(fct_ret))
+#print_board(a_board)
