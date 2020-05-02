@@ -413,6 +413,14 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
 
                 
                 new_domain = copy.deepcopy(neighbors[i].domain)
+                # Since the following code involves a lot of removal 
+                # of elements in a list, the list of domain values 
+                # is copied into this variable "new_domain", which 
+                # will be used as a temporary variable from which 
+                # elements are removed. Once all removal is done, 
+                # neighbors[i].domain will be updated with the list 
+                # contained in new_domain.
+
                 if a_cell.constr[i] == constr_strings[i][0]:
                 # The list of Cell objects, the list of constraint 
                 # strings and the list of return values all arrange 
@@ -432,8 +440,7 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
 
                         for j in range(len(neighbors[i].domain)):
                             if neighbors[i].domain[j] <= a_cell.assign:
-                                #neighbors[i].domain.pop(j)
-
+                                new_domain.remove(neighbors[i].domain[j])
                                 # Remove the values that are smaller 
                                 # than or equal to the origin's 
                                 # assigned value
@@ -453,7 +460,6 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
                                 # Remove the values that are smaller 
                                 # than or equal to the smallest value 
                                 # in the origin's domain
-                        neighbors[i].domain = copy.deepcopy(new_domain)
 
                 elif a_cell.constr[i] == constr_strings[i][1]:
                     # constr_strings[i][1] is always the string that
@@ -462,13 +468,13 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
                     if a_cell.assign != None:
                         for j in range(len(neighbors[i].domain)):
                             if neighbors[i].domain[j] >= a_cell.assign:
-                                neighbors[i].domain.pop[j]
-
+                                new_domain.remove(neighbors[i].domain[j])
+                    
                     else:
                         dom_max = max(a_cell.domain)
                         for j in range(len(neighbors[i].domain)):
                             if neighbors[i].domain[j] >= dom_max:
-                                neighbors[i].domain.pop(j)
+                                new_domain.remove(neighbors[i].domain[j])
 
                 else:
                     # The case where there's no constraint regarding
@@ -477,7 +483,7 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
                     if a_cell.assign != None:
                         for j in range(len(neighbors[i].domain)):
                             if neighbors[i].domain[j] == a_cell.assign:
-                                neighbors[i].domain.remove(a_cell.assign)
+                                new_domain.remove(neighbors[i].domain[j])
                                 break
                         # If the origin cell has been assigned a value,
                         # remove that value from the neighbor's domain,
@@ -488,6 +494,10 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
                         # value, no action needs to be taken. In the 
                         # recursive calls, the origin cell may not have 
                         # been assigned a value.
+
+                neighbors[i].domain = copy.deepcopy(new_domain)
+                # Updating neighbors[i].domain with the newer list 
+                # of domain values contained in new_domain
 
                 if len(neighbors[i].domain) == 0:
                     return 1
