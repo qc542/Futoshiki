@@ -370,16 +370,18 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
     # cell's neighbors): the neighbor above ("up"), below ("down"),
     # left and then right
 
+    up_ret = 0
+    down_ret = 0
+    left_ret = 0
+    right_ret = 0
+    # The point is to initialize these variables. If the recursive 
+    # calls in the code below are executed, these variables 
+    # will hold the return values of those calls
+
     ret_vals = [up_ret, down_ret, left_ret, right_ret]
     # The variables to store the return values are arranged in 
     # the same order as the list of Cell objects above: up, 
     # down, left and right
-
-    for val in ret_vals:
-        val = 0
-    # The point is to initialize these variables. If the recursive 
-    # calls in the code below are executed, these variables 
-    # will hold the return values of those calls
 
     constr_strings = [["STU", "GTU"], ["STD", "GTD"],
             ["STL", "GTL"], ["STR", "GTR"]]
@@ -464,11 +466,13 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
                     if a_cell.assign != None:
                         for j in range(len(neighbors[i].domain)):
                             if neighbors[i].domain[j] == a_cell.assign:
-                                neighbors[i].domain.remove(a_cell.assign);
+                                neighbors[i].domain.remove(a_cell.assign)
+                                break
                         # If the origin cell has been assigned a value,
                         # remove that value from the neighbor's domain,
                         # since the same number can only show up once 
-                        # in any row or column
+                        # in any row or column. Break the for loop after 
+                        # the value has been removed.
                         # If the origin cell has NOT been assigned a
                         # value, no action needs to be taken. In the 
                         # recursive calls, the origin cell may not have 
