@@ -122,7 +122,13 @@ def print_board(a_board: Board) -> int:
 
 def forward_checking_test(a_board: Board) -> int:
     """ The function takes a Board object as the parameter and looks for 
-    the first cell on the board that has been assigned a value."""
+    the first cell on the board that has been assigned a value. Once found, 
+    that cell is passed to forward_checking. If forward_checking returns 0, 
+    that indicates the operation was conducted successfully, and forward_-
+    checking_test passes the Board object to print_board. If forward_chec-
+    king returns 1, that indicates the puzzle has no solution, and forwad_-
+    checking_test prints a relevant message."""
+
     for a_row in range(len(a_board.cells)):
         for a_column in range(len(a_board.cells[a_row])):
             if a_board.cells[a_row][a_column].assign > 0:
@@ -134,8 +140,7 @@ def forward_checking_test(a_board: Board) -> int:
         print("The function forward_checking returned 0. Forward \
         checking was conducted succesfully. The board following the \
         completion of forward checking is shown below: \n")
-
-
+        print_board(a_board)
 
     else:
         print("The function forward_checking returned 1. There is \
@@ -143,8 +148,7 @@ def forward_checking_test(a_board: Board) -> int:
         reduced to none. Therefore there is no solution to this \
         puzzle.\n")
 
-
-
+    return 0
 
 
 #load_input_test()
