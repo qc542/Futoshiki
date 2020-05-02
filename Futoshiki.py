@@ -318,7 +318,7 @@ def initialize_board(initial_state: list, constr: list) -> Board:
     return Board(all_cells, constr)
 
 
-def forward_checking(a_board: Board, a_cell: Cell) -> int:
+def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
     """ Conducts forward checking for the given assigned cell to 
     ensure there's no other cell in the same row or column with 
     the same assignment. Also reduces each neighbor's domain to 
@@ -333,6 +333,11 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
     None. If the move is legit, the method returns the destination 
     as a Cell object, and the corresponding variable (left, right 
     etc.) is turned into a reference (shallow copy) to that Cell."""
+
+    if a_cell.coord in explored:
+        return 0
+    else:
+        explored.add(a_cell.coord)
 
     if a_cell.domain == 0:
         return 1
@@ -406,6 +411,8 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
                 # If the cell has been assigned a value, 
                 # the program will jump to the recursive call ahead
 
+                
+                new_domain = copy.deepcopy(neighbors[i].domain)
                 if a_cell.constr[i] == constr_strings[i][0]:
                 # The list of Cell objects, the list of constraint 
                 # strings and the list of return values all arrange 
@@ -425,7 +432,8 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
 
                         for j in range(len(neighbors[i].domain)):
                             if neighbors[i].domain[j] <= a_cell.assign:
-                                neighbors[i].domain.pop(j)
+                                #neighbors[i].domain.pop(j)
+
                                 # Remove the values that are smaller 
                                 # than or equal to the origin's 
                                 # assigned value
@@ -441,10 +449,11 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
                         dom_min = min(a_cell.domain)
                         for j in range(len(neighbors[i].domain)):
                             if neighbors[i].domain[j] <= dom_min:
-                                neighbors[i].domain.pop(j)
+                                new_domain.remove(neighbors[i].domain[j])
                                 # Remove the values that are smaller 
                                 # than or equal to the smallest value 
                                 # in the origin's domain
+                        neighbors[i].domain = copy.deepcopy(new_domain)
 
                 elif a_cell.constr[i] == constr_strings[i][1]:
                     # constr_strings[i][1] is always the string that
@@ -493,14 +502,15 @@ def forward_checking(a_board: Board, a_cell: Cell) -> int:
                     # "if neighbors[i].assign == None" statement above.
                     # Therefore this line does not incur a runtime error.
 
-            return_vals[i] = forward_checking(a_board, neighbors[i])
+            ret_vals[i] = forward_checking(a_board, neighbors[i],
+                    explored)
             """ This line is executed if the neighbor has been assigned 
             a value or the neighbor's domain is not empty after the 
             reduction."""
        
-    return max(return_vals)
+    return max(ret_vals)
     """ If any of the recursive calls returns one, there's no solution 
-    to the puzzle. If any of the four elements of "return_vals" equals 
+    to the puzzle. If any of the four elements of "ret_vals" equals 
     one, the function will return one. The preceding function that made 
     the first call to forward_checking will stop the program if the 
     return value is one and continue if it's zero."""
