@@ -566,4 +566,58 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
     return value is one and continue if it's zero."""
 
 
+def identical_boards(prev_board: Board, curr_board: Board) -> bool:
+    """ The function works in tandem with start_fc. It takes two Board 
+    objects and verifies whether they are identical, i.e. whether the 
+    assigned values and domains of each cell are identical between the 
+    two boards. It returns False as soon as a difference is spotted; 
+    if no difference is found after comparing all twenty-five cells, 
+    it returns True."""
+
+    for i in range(0, 5):
+        for j in range(0, 5):
+            prev_cell = prev_board.cells[i][j]
+            curr_cell = curr_board.cells[i][j]
+
+            if prev_cell.assign != curr_cell.assign:
+                return False
+
+            if prev_cell.domain != curr_cell.domain:
+                return False
+
+            """ The other two fields of the Cell class, the coordinate 
+            and the list of constraints, are not compared because they 
+            are not altered over the course of forward checking. Only 
+            the assigned value and the list of domain values need to 
+            be compared."""
+
+    return True
+
+
+def start_fc(a_board: Board, a_cell: Cell) -> int:
+    """ This is the overarching function for forward checking. It calls 
+    forward_checking on the given Cell object, located on the given Board, 
+    and returns 1 when there's no solution to the puzzle (same as how 
+    forward_checking behaves). If forward_checking returns 0, meaning that 
+    function ran without error, start_fc calls identical_boards to verify 
+    whether the board has been modified. If yes, start_fc repeatedly calls 
+    forward_checking on the same cell of the same board until the board is 
+    no longer modified, after which start_fc returns 0. The point is to 
+    ensure every other cell's domain is updated once a cell has been 
+    modified."""
+    
+    identical = False
+    while not identical:
+        explored = set()
+        prev_board = copy.deepcopy(a_board)
+        # Saves a copy of the original board
+        failure = forward_checking(a_board, a_cell, explored)
+        if failure:
+            # forward_checking returns 1 when there's no solution to 
+            # the puzzle and returns 0 when it has run without error
+            return 1
+        identical = identical_boards(prev_board, a_board)
+
+    return 0
+
 
