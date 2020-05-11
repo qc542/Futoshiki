@@ -397,6 +397,47 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
     # constraints for the neighbor above, the second sublist 
     # is for the neighbor below, followed by those for "left"
     # and "right"
+    
+
+    origin_row = a_cell.coord[0]
+    origin_col = a_cell.coord[1]
+    if a_cell.assign != None:
+        # If the origin cell has been assigned a value, remove 
+        # this value from the domains of all other cells that 
+        # in the same row or column
+
+        targets = []
+        # Stores references to all cells that are in the same
+        # column or row
+
+        for i in range(0, 5):
+            # Add to the list "targets" the cells that are in 
+            # the same column as the origin cell
+            if i == origin_row:
+                # Skip the origin cell itself
+                continue
+            targets.append(a_board.cells[i][origin_col])
+                        
+        for i in range(0, 5):
+            # Add to the list the cells that are in the same 
+            # row as the origin cell
+            if i == origin_col:
+                # Skip the origin cell itself
+                continue
+            targets.append(a_board.cells[origin_row][i])
+        
+        for i in range(len(targets)):
+            current_cell = targets[i]
+            if current_cell.assign == None:
+                # If the current cell has yet to be assigned 
+                # a value, remove the origin's assigned value
+                # from the current cell's domain, if applicable
+                new_domain = copy.deepcopy(current_cell.domain)
+                for j in range(len(current_cell.domain)):
+                    if current_cell.domain[j] == a_cell.assign:
+                        new_domain.remove(current_cell.domain[j])
+
+                current_cell.domain = new_domain
 
     for i in range(len(neighbors)):
         if isinstance(neighbors[i], Cell):
@@ -411,7 +452,6 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
                 # If the cell has been assigned a value, 
                 # the program will jump to the recursive call ahead
 
-                
                 new_domain = copy.deepcopy(neighbors[i].domain)
                 # Since the following code involves a lot of removal 
                 # of elements in a list, the list of domain values 
