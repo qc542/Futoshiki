@@ -137,8 +137,7 @@ def forward_checking_test(a_board: Board) -> int:
                 cells_assigned.append(a_board.cells[a_row][a_column])
     
     for i in range(len(cells_assigned)):
-        explored = set()
-        failure = forward_checking(a_board, cells_assigned[i], explored)
+        failure = start_fc(a_board, cells_assigned[i])
         if not failure:
             print("The function forward_checking was initially " + 
             "called on the cell " + str(cells_assigned[i].coord) + 
