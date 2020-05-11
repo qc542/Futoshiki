@@ -129,26 +129,31 @@ def forward_checking_test(a_board: Board) -> int:
     king returns 1, that indicates the puzzle has no solution, and forwad_-
     checking_test prints a relevant message."""
 
+    cells_assigned = []
+
     for a_row in range(len(a_board.cells)):
         for a_column in range(len(a_board.cells[a_row])):
             if a_board.cells[a_row][a_column].assign != None:
-                origin = a_board.cells[a_row][a_column]
-                break
+                cells_assigned.append(a_board.cells[a_row][a_column])
+    
+    for i in range(len(cells_assigned)):
+        explored = set()
+        failure = forward_checking(a_board, cells_assigned[i], explored)
+        if not failure:
+            print("The function forward_checking was initially " + 
+            "called on the cell " + str(cells_assigned[i].coord) + 
+            "; the function returned 0. Forward checking was " + 
+            "conducted succesfully. The board following the " + 
+            " completion of forward checking is shown below: """, 
+            end = "\n\n")
+            print_board(a_board)
 
-    explored = set()
-    failure = forward_checking(a_board, origin, explored)
-    if not failure:
-        print("The function forward_checking returned 0. " + 
-                "Forward checking was conducted succesfully. " + 
-                "The board following the completion of forward " + 
-                "checking is shown below: """, end = "\n\n")
-        print_board(a_board)
-
-    else:
-        print("The function forward_checking returned 1. There " + 
-                "is at least one cell on the board whose domain " + 
-                "has been reduced to none. Therefore there is no " + 
-                "solution to this puzzle.")
+        else:
+            print("The function forward_checking returned 1 when " + 
+            "it was initially called on the cell " + 
+            str(cells_assigned[i].coord) + ". There is at least one " + 
+            "cell on the board whose domain has been reduced to " + 
+            "none. Therefore there is no solution to this puzzle.")
 
     return 0
 
