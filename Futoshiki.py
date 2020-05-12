@@ -722,4 +722,9 @@ def select_unassigned_cell(a_board: Board) -> Cell:
     return tied[degree_ranking[0][0]]
 
 
-
+def order_domain_values(a_cell: Cell) -> int:
+    """ The function takes a Cell object and sorts its list of domain 
+    values in ascending order."""
+ 
+    a_cell.domain = sorted(a_cell.domain)
+    return 0
