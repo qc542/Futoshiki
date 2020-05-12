@@ -150,12 +150,25 @@ def forward_checking_test(a_board: Board) -> int:
 
     return 0
 
+def calc_degree_test(a_board: Board) -> int:
+    """ The function takes a Board object as the parameter and tests the 
+    calc_degree function. It loops through all cells on the given board 
+    and prints the degree of each cell in a grid format."""
+
+    for i in range(0, 5):
+        for j in range(0, 5):
+            print(str(calc_degree(a_board, a_board.cells[i][j])) + ' ',
+                    end = '')
+        print('\n\n', end = '')
+
+    print("The degree of each cell has been printed.")
+    return 0
 
 #load_input_test()
 #initialize_board_test()
 [initial_state, constr] = load_input("Input0.txt")
 a_board = initialize_board(initial_state, constr)
 #board_moves_test(a_board)
-fct_ret = forward_checking_test(a_board)
-print("The function forward_checking_test returned " + str(fct_ret))
+#fct_ret = forward_checking_test(a_board)
 #print_board(a_board)
+calc_degree_test(a_board)
