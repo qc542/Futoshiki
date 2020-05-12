@@ -201,6 +201,17 @@ def select_unassigned_cell_test(a_board: Board) -> int:
     return 0
 
 
+def is_complete_test(a_board: Board) -> int:
+    if is_complete(a_board):
+        print("The function is_complete indicates all cells on the " +
+                "given board have been assigned a value.")
+    else:
+        print("The function is_complete indicates NOT all cells on " +
+                "the given board have been assigned a value.")
+
+    return 0
+
+
 #load_input_test()
 #initialize_board_test()
 [initial_state, constr] = load_input("Input0.txt")
@@ -209,4 +220,5 @@ a_board = initialize_board(initial_state, constr)
 #fct_ret = forward_checking_test(a_board)
 #print_board(a_board)
 #calc_degree_test(a_board)
-select_unassigned_cell_test(a_board)
+#select_unassigned_cell_test(a_board)
+is_complete_test(a_board)
