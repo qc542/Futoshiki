@@ -651,8 +651,15 @@ def start_fc(a_board: Board, a_cell: Cell) -> int:
 
 
 def select_unassigned_cell(a_board: Board) -> Cell:
+    """ The function takes a Board object as its parameter and returns 
+    a cell on the board, selected by the minimum-remaining-values (MRV) 
+    heuristic and, in case there's a tie, the degree heuristic as well."""
+
     ranking = []
-    
+    """ After the following for loop has completed, the list "ranking" 
+    will contain all cells on the board, ranked by the number of values 
+    in each cell's domain in ascending order."""
+
     for i in range(0, 5):
         for j in range(0, 5):
             current = a_board.cells[i][j]
@@ -661,27 +668,56 @@ def select_unassigned_cell(a_board: Board) -> Cell:
                 for k in range(len(ranking)):
                     if len(ranking[k].domain) >= len(current.domain):
                         ranking.insert(k, current)
+                        # Insert the current cell into the list,
+                        # ahead of the first element that has more 
+                        # remaining values or the same number of remaining
+                        # values
                         inserted = True
                         break
                 if not inserted:
+                    # Indicates the current cell has more remaining values
+                    # than any element in the list
                     ranking.append(current)
 
     if len(ranking) == 1: return ranking[0]
     tied = [ranking[0]]
+    # At this point the first element in the list "ranking" has the
+    # least remaining values in its domain
     ind = 1
     while len(ranking[ind].domain) == len(tied[0].domain):
+        # Loop through the list to find out if any other cell has the
+        # same number of remaining values, i.e. whether there's a tie
         tied.append(ranking[ind])
         ind += 1
         if ind == len(ranking):
             break
 
     if len(tied) == 1: return tied[0]
+    # Indicates there's no tie. Return the only element in the 
+    # list "tied"
     
+    """ If there is a tie, call the calc_degree function on each 
+    cell in the list "tied" to rank these cells by their degrees in 
+    descending order."""
     degree_ranking = []
     for i in range(len(tied)):
         degree_ranking.append((i, calc_degree(a_board, tied[i])))
+        # Appends a tuple whose first element is the cell's index in
+        # the list "tied" and second element is the degree
+    
     degree_ranking = sorted(degree_ranking, key=lambda pair: pair[1],
             reverse=True)
+    """ In Python, lambda is an anonymous function. Here the function 
+    contains the expression that returns the second element of each 
+    tuple as the key for sorting, i.e. the degree of each cell. The 
+    parameter "reverse=True" instructs the function to sort in 
+    descending order; without this parameter, the function sorts in 
+    ascending order by default.
+
+    After sorting, the first tuple in degree_ranking refers to the cell 
+    with the lowest degree. Since the first element of the tuple is the 
+    cell's index in "tied", subscript "tied" with this index to return 
+    the cell."""
 
     return tied[degree_ranking[0][0]]
 
