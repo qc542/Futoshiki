@@ -594,6 +594,35 @@ def identical_boards(prev_board: Board, curr_board: Board) -> bool:
     return True
 
 
+def calc_degree(a_board: Board, origin: Cell) -> int:
+    """ The function takes a Board object and a Cell object as its 
+    parameters and returns the degree of the given cell, which 
+    equals the number of constraints the cell has regarding its 
+    **unassigned** neighbors."""
+
+    degree = 0
+    for i in range(len(origin.constr)):
+        if (origin.constr[i] == "N/A") or (origin.constr[i] == "None"):
+            continue
+
+        """ The strings that represent constraints are all in a form 
+        similar to "STU", "GTD" and so on, as explained previously. 
+        Therefore the third letter of the string indicates which 
+        neighbor the constraint applies to."""
+        if origin.constr[i][2] == 'U':
+            neighbor = a_board.go_up(origin)
+        elif origin.constr[i][2] == 'D':
+            neighbor = a_board.go_down(origin)
+        elif origin.constr[i][2] == 'L':
+            neighbor = a_board.go_left(origin)
+        elif origin.constr[i][2] == 'R':
+            neighbor = a_board.go_right(origin)
+        
+        if neighbor.assign == None: degree += 1
+
+    return degree
+
+    
 def start_fc(a_board: Board, a_cell: Cell) -> int:
     """ This is the overarching function for forward checking. It calls 
     forward_checking on the given Cell object, located on the given Board, 
@@ -621,3 +650,31 @@ def start_fc(a_board: Board, a_cell: Cell) -> int:
     return 0
 
 
+"""def select_unassigned_cell(a_board: Board) -> Cell:
+    ranking = []
+    
+    for i in range(0, 5):
+        for j in range(0, 5):
+            current = a_board.cells[i][j]
+            if current.assign == None:
+                inserted = False
+                for k in range(len(ranking)):
+                    if len(ranking[k].domain) >= len(current.domain):
+                        ranking.insert(k, current)
+                        inserted = True
+                        break
+                if not inserted:
+                    ranking.append(current)
+
+    tied = [ranking[0]]
+    ind = 1
+    while len(ranking[ind].domain) == len(tied[0].domain):
+        tied.append(ranking[ind])
+        ind += 1
+
+    if len(tied) == 1: return tied[0]
+    
+    num_constr = []
+    for i in range(len(tied)):
+
+"""
