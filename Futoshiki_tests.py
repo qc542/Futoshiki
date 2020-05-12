@@ -164,6 +164,43 @@ def calc_degree_test(a_board: Board) -> int:
     print("The degree of each cell has been printed.")
     return 0
 
+
+def select_unassigned_cell_test(a_board: Board) -> int:
+    
+    selected = select_unassigned_cell(a_board)
+    print("The following outcomes were obtained before forward " +
+            "checking is applied to the given board: ")
+    print("The cell " + str(selected.coord) + " was returned by " +
+            "the function select_unassigned_cell.")
+    print("The degree of the cell is " + str(calc_degree(a_board, selected)) +
+            ".")
+    print("There are " + str(len(selected.domain)) + " values remaining " +
+            "in the cell's domain: " + str(selected.domain))
+    
+    for i in range(0, 41):
+        print('*', end='')
+    print('\n', end='')
+
+    print("Now applying forward checking to the board:")
+    print("Calling start_fc on the board...")
+    if not start_fc(a_board, a_board.cells[0][0]):
+        print("Done.")
+        selected = select_unassigned_cell(a_board)
+        print("The following outcomes were obtained after forward " + 
+                "checking has been applied: ")
+        print("The cell " + str(selected.coord) + " was returned by " +
+                "the function select_unassigned_cell.")
+        print("The degree of the cell is " +
+                str(calc_degree(a_board, selected)) + ".")
+        print("There are " + str(len(selected.domain)) + " values remaining " +
+                "in the cell's domain: " + str(selected.domain))
+    
+    else:
+        print("start_fc returned 1 instead of 0.")
+
+    return 0
+
+
 #load_input_test()
 #initialize_board_test()
 [initial_state, constr] = load_input("Input0.txt")
@@ -171,4 +208,5 @@ a_board = initialize_board(initial_state, constr)
 #board_moves_test(a_board)
 #fct_ret = forward_checking_test(a_board)
 #print_board(a_board)
-calc_degree_test(a_board)
+#calc_degree_test(a_board)
+select_unassigned_cell_test(a_board)
