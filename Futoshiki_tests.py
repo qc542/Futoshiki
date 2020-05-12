@@ -212,6 +212,28 @@ def is_complete_test(a_board: Board) -> int:
     return 0
 
 
+def order_domain_values_test(a_cell: Cell) -> int:
+    print("Sorting domain values of the given cell...")
+    if not order_domain_values(a_cell):
+        print("Sorting complete. Now the domain values are ordered as " +
+                str(a_cell.domain))
+        return 0
+    else:
+        print("order_domain_values did not return 0; test terminated.")
+        return 1
+
+
+"""def is_consistent_test(a_board: Board) -> int:
+    print("Applying forward checking to the given board:")
+    print("Calling start_fc on the given board...")
+    if not start_fc(a_board):
+        print("Forward checking succeeded.")
+    else:
+        print("start_fc returned 1 instead of 0; test terminated.")
+        return 1
+
+    selected = select_unassigned_cell(a_board)"""
+
 #load_input_test()
 #initialize_board_test()
 [initial_state, constr] = load_input("Input0.txt")
