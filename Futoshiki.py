@@ -622,7 +622,7 @@ def calc_degree(a_board: Board, origin: Cell) -> int:
 
     return degree
 
-    
+
 def start_fc(a_board: Board, a_cell: Cell) -> int:
     """ This is the overarching function for forward checking. It calls 
     forward_checking on the given Cell object, located on the given Board, 
@@ -650,7 +650,7 @@ def start_fc(a_board: Board, a_cell: Cell) -> int:
     return 0
 
 
-"""def select_unassigned_cell(a_board: Board) -> Cell:
+def select_unassigned_cell(a_board: Board) -> Cell:
     ranking = []
     
     for i in range(0, 5):
@@ -666,15 +666,24 @@ def start_fc(a_board: Board, a_cell: Cell) -> int:
                 if not inserted:
                     ranking.append(current)
 
+    if len(ranking) == 1: return ranking[0]
     tied = [ranking[0]]
     ind = 1
     while len(ranking[ind].domain) == len(tied[0].domain):
         tied.append(ranking[ind])
         ind += 1
+        if ind == len(ranking):
+            break
 
     if len(tied) == 1: return tied[0]
     
-    num_constr = []
+    degree_ranking = []
     for i in range(len(tied)):
+        degree_ranking.append((i, calc_degree(a_board, tied[i])))
+    degree_ranking = sorted(degree_ranking, key=lambda pair: pair[1],
+            reverse=True)
 
-"""
+    return tied[degree_ranking[0][0]]
+
+
+
