@@ -281,10 +281,14 @@ def backtrack_test(a_board: Board) -> int:
         return 1
     
     print("Calling the backtrack function on the given board...")
-    if backtrack(a_board):
+    if is_complete(backtrack(a_board)):
+        a_board = copy.deepcopy(backtrack(a_board))
         print("The backtrack function successfully ran. The given " + 
                 "board after the function returned is shown below:")
         print_board(a_board)
+        print("\n\n\nAll assigned values above are displayed in " +
+                "a grid layout below: ")
+        print_board_assign(a_board)
         print("Test successfully completed.")
         return 0
     else:
@@ -324,3 +328,5 @@ a_board = initialize_board(initial_state, constr)
 #order_domain_values_test(a_board.cells[0][0])
 #is_consistent_test(a_board)
 backtrack_test(a_board)
+"""if is_complete(backtrack(a_board)):
+    print_board_assign(a_board)"""

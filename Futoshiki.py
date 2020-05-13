@@ -758,8 +758,20 @@ def is_consistent(a_board: Board, a_cell: Cell, value: int) -> bool:
     return True
 
 
-def backtrack(a_board: Board) -> bool:
-    if is_complete(a_board): return True
+def return_board(a_board: Board) -> Board:
+    cells = []
+    for i in range(0, 5):
+        cells.append([])
+        for j in range(0, 5):
+            cells[i].append(Cell((i, j), a_board.cells[i][j].assign, 
+                    [], []))
+
+    ret = Board(cells, [])
+    return ret
+
+
+def backtrack(a_board: Board) -> Board:
+    if is_complete(a_board): return return_board(a_board)
     selected = select_unassigned_cell(a_board)
     cell_row = selected.coord[0]
     cell_col = selected.coord[1]
@@ -771,9 +783,10 @@ def backtrack(a_board: Board) -> bool:
             selected.assign = sorted_domain[i]
             selected.domain = None
             if not start_fc(a_board, selected):
-                if backtrack(a_board): return True
+                if is_complete(backtrack(a_board)):
+                    return return_board(backtrack(a_board))
         a_board = copy.deepcopy(old_board)
-    return False
+    return a_board
 
 
 
