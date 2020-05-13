@@ -224,7 +224,7 @@ def is_consistent_test(a_board: Board) -> int:
     if not start_fc(a_board, a_board.cells[0][0]):
         print("Forward checking succeeded.")
     else:
-        print("start_fc returned 1 instead of 0; test terminated.")
+        print("start_fc returned 1 instead of 0; test aborted.")
         return 1
 
     selected = select_unassigned_cell(a_board)
@@ -271,10 +271,34 @@ def is_consistent_test(a_board: Board) -> int:
     print("\nTest complete.")
     return 0
 
+def backtrack_test(a_board: Board) -> int:
+    print("Applying forward checking to the given board:")
+    print("Calling start_fc...")
+    if not start_fc(a_board, a_board.cells[0][0]):
+        print("Done")
+    else:
+        print("start_fc returned 1 instead of 0; test aborted.")
+        return 1
+    
+    print("Calling the backtrack function on the given board...")
+    if backtrack(a_board):
+        print("The backtrack function successfully ran. The given " + 
+                "board after the function returned is shown below:")
+        print_board(a_board)
+        print("Test successfully completed.")
+        return 0
+    else:
+        print("The backtrack function returned False, indicating " +
+                "there is no solution to the puzzle. Test aborted.")
+        print("The given board after backtrack returned False is " + 
+                "shown below:")
+        print_board(a_board)
+        return 1
+
 
 #load_input_test()
 #initialize_board_test()
-[initial_state, constr] = load_input("Input0.txt")
+[initial_state, constr] = load_input("Input3.txt")
 a_board = initialize_board(initial_state, constr)
 #board_moves_test(a_board)
 #fct_ret = forward_checking_test(a_board)
@@ -283,4 +307,5 @@ a_board = initialize_board(initial_state, constr)
 #select_unassigned_cell_test(a_board)
 #is_complete_test(a_board)
 #order_domain_values_test(a_board.cells[0][0])
-is_consistent_test(a_board)
+#is_consistent_test(a_board)
+backtrack_test(a_board)
