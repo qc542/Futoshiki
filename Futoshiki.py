@@ -497,25 +497,6 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
                             if neighbors[i].domain[j] >= a_cell.assign:
                                 new_domain.remove(neighbors[i].domain[j])
 
-                else:
-                    # The case where there's no constraint regarding
-                    # this neighbor
-
-                    if a_cell.assign != None:
-                        for j in range(len(neighbors[i].domain)):
-                            if neighbors[i].domain[j] == a_cell.assign:
-                                new_domain.remove(neighbors[i].domain[j])
-                                break
-                        # If the origin cell has been assigned a value,
-                        # remove that value from the neighbor's domain,
-                        # since the same number can only show up once 
-                        # in any row or column. Break the for loop after 
-                        # the value has been removed.
-                        # If the origin cell has NOT been assigned a
-                        # value, no action needs to be taken. In the 
-                        # recursive calls, the origin cell may not have 
-                        # been assigned a value.
-
                 neighbors[i].domain = copy.deepcopy(new_domain)
                 # Updating neighbors[i].domain with the newer list 
                 # of domain values contained in new_domain
