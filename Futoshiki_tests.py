@@ -213,14 +213,9 @@ def is_complete_test(a_board: Board) -> int:
 
 
 def order_domain_values_test(a_cell: Cell) -> int:
-    print("Sorting domain values of the given cell...")
-    if not order_domain_values(a_cell):
-        print("Sorting complete. Now the domain values are ordered as " +
-                str(a_cell.domain))
-        return 0
-    else:
-        print("order_domain_values did not return 0; test terminated.")
-        return 1
+    print("Upon sorting, the domain values of the given cell " + 
+                "are ordered as " + str(order_domain_values(a_cell)))
+    return 0
 
 
 def is_consistent_test(a_board: Board) -> int:
