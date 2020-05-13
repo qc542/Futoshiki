@@ -598,8 +598,9 @@ def start_fc(a_board: Board, a_cell: Cell) -> int:
     modified."""
     
     identical = False
+    explored = set()
     while not identical:
-        explored = set()
+        explored.clear()
         prev_board = copy.deepcopy(a_board)
         # Saves a copy of the original board
         failure = forward_checking(a_board, a_cell, explored)
