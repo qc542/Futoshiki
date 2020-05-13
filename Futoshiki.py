@@ -724,12 +724,14 @@ def select_unassigned_cell(a_board: Board) -> Cell:
     return tied[degree_ranking[0][0]]
 
 
-def order_domain_values(a_cell: Cell) -> int:
-    """ The function takes a Cell object and sorts its list of domain 
-    values in ascending order."""
- 
-    a_cell.domain = sorted(a_cell.domain)
-    return 0
+def order_domain_values(a_cell: Cell) -> list:
+    """ The function takes a Cell object, sorts its list of domain 
+    values in ascending order and returns the sorted list."""
+
+    """ Python's sorted() function does NOT alter the original list; 
+    it simply creates a new list during sorting and returns the new, 
+    sorted list."""
+    return(sorted(a_cell.domain))
 
 
 def is_complete(a_board: Board) -> bool:
@@ -792,3 +794,9 @@ def is_consistent(a_board: Board, a_cell: Cell, value: int) -> bool:
             return False
     
     return True
+
+
+def backtrack(a_board: Board) -> bool:
+    if is_complete(a_board): return true
+    selected = select_unassigned_cell(a_board)
+
