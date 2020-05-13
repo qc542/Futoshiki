@@ -341,8 +341,9 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
     else:
         explored.add(a_cell.coord)
 
-    if a_cell.domain == 0:
-        return 1
+    if a_cell.domain != None:
+        if len(a_cell.domain) == 0: return 1
+
     # Some of the recursive calls may encounter cases where the 
     # domain of the origin cell has been reduced to none, which 
     # indicates that there's no solution and that the program 
@@ -797,6 +798,17 @@ def is_consistent(a_board: Board, a_cell: Cell, value: int) -> bool:
 
 
 def backtrack(a_board: Board) -> bool:
-    if is_complete(a_board): return true
+    if is_complete(a_board): return True
     selected = select_unassigned_cell(a_board)
+    sorted_domain = order_domain_values(selected)
+    for i in range(len(sorted_domain)):
+        if is_consistent(a_board, selected, sorted_domain[i]):
+            selected.assign = sorted_domain[i]
+            selected.domain = None
+            if start_fc(a_board, selected): return False
+            if backtrack(a_board): return True
+        selected.assign = None
+    return False
+
+
 
