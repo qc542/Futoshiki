@@ -728,3 +728,65 @@ def order_domain_values(a_cell: Cell) -> int:
  
     a_cell.domain = sorted(a_cell.domain)
     return 0
+
+
+def is_complete(a_board: Board) -> bool:
+    """ The function takes a Board object as its parameter and loops 
+    through all cells on the board to verify whether each has been 
+    assigned a value. It returns False as soon as an unassigned 
+    cell is spotted. Otherwise it returns True after the for loop 
+    has completed."""
+
+    for i in range(0, 5):
+        for j in range(0, 5):
+            if a_board.cells[i][j].assign == None:
+                return False
+    return True
+
+
+def is_consistent(a_board: Board, a_cell: Cell, value: int) -> bool:
+    """ The function takes a Board object, a Cell object that's part of 
+    the board, and a candidate value as its parameters. It first verifies 
+    whether the candidate value has been assigned to any other cell 
+    in the same row or column as the given cell. It then verifies whether 
+    the candidate value violates any of the constraints on the given cell. 
+    It returns False as soon as the candidate violates a condition; 
+    otherwise it returns True when all conditions have been met."""
+
+    
+    current_row = a_cell.coord[0]
+    current_column = a_cell.coord[1]
+    for i in range(0, 5):
+        if i == current_column: continue
+        if a_board.cells[current_row][i].assign != None:
+            if a_board.cells[current_row][i].assign == value:
+                return False
+
+    for i in range(0, 5):
+        if i == current_row: continue
+        if a_board.cells[i][current_column].assign != None:
+            if a_board.cells[i][current_column].assign == value:
+                return False
+
+    """ This part verifies whether the candidate value complies with 
+    all the constraints on the given cell."""
+    constr = a_cell.constr
+    for i in range(len(constr)):
+        if (constr[i] == "N/A") or (constr[i] == "None"):
+            continue
+        if constr[i][2] == 'U':
+            neighbor = a_board.go_up(a_cell)
+        elif constr[i][2] == 'D':
+            neighbor = a_board.go_down(a_cell)
+        elif constr[i][2] == 'L':
+            neighbor = a_board.go_left(a_cell)
+        elif constr[i][2] == 'R':
+            neighbor = a_board.go_right(a_cell)
+
+        if neighbor.assign == None: continue
+        if (constr[i][0] == 'S') and (value >= neighbor.assign):
+            return False
+        if (constr[i][0] == 'G') and (value <= neighbor.assign):
+            return False
+    
+    return True
