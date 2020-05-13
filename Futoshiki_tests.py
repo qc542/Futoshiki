@@ -271,6 +271,7 @@ def is_consistent_test(a_board: Board) -> int:
     print("\nTest complete.")
     return 0
 
+
 def backtrack_test(a_board: Board) -> int:
     print("Applying forward checking to the given board:")
     print("Calling start_fc...")
