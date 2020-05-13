@@ -759,21 +759,93 @@ def is_consistent(a_board: Board, a_cell: Cell, value: int) -> bool:
 
 
 def backtrack(a_board: Board) -> bool:
-    if is_complete(a_board): return True
+    """ The function takes a Board object as its parameter and runs 
+    backtracking on the board. If a solution can be obtained, it 
+    calls generate_output and then returns True."""
+
+    if is_complete(a_board):
+        # If the assignment is complete, generate the output file
+        # and then return True
+        generate_output(a_board)
+        return True
+    
     selected = select_unassigned_cell(a_board)
+    
+    # The two lines below keep track of the row & column numbers 
+    # of the selected cell
+    """ The reason is as deep copies of the board will be created in 
+    the code below, and the variable "selected" will need to be 
+    reassigned the Cell object on the newly-created board. """
     cell_row = selected.coord[0]
     cell_col = selected.coord[1]
+    
     sorted_domain = order_domain_values(selected)
     for i in range(len(sorted_domain)):
         old_board = copy.deepcopy(a_board)
+        # Created a deep copy of the board before the recursive calls 
+        # are made so that if the algorithm backtracks, the original 
+        # state of the board can be restored
+
         selected = a_board.cells[cell_row][cell_col]
+        # As stated previously, "selected" needs to be re-assigned
+        # the Cell object on the newly-created board
+
         if is_consistent(a_board, selected, sorted_domain[i]):
             selected.assign = sorted_domain[i]
             selected.domain = None
             if not start_fc(a_board, selected):
+                # Run forward checking after the cell has been assigned
+                # a value. Only make the recursive call to backtrack 
+                # if start_fc returns 0, which indicates forward checking 
+                # was completed without spotting any cell with an empty 
+                # domain
                 if backtrack(a_board): return True
+        
         a_board = copy.deepcopy(old_board)
+        # The function only reaches this point when the candidate value, 
+        # sorted_domain[i], made the algorithm backtrack. In that case, 
+        # use the deep copy previously made to restore the board and 
+        # move onto the next iteration of the for loop
+    
     return False
 
 
+def generate_output(a_board: Board) -> int:
+    """ This function is called when backtrack has obtained a solution. 
+    It takes the Board object passed by backtrack, asks the user for 
+    the output filename and writes the solution into a plain text 
+    file."""
 
+    out_filename = input("""Now please enter below the output filename, e.g. "Output1.txt". The filename is case-sensitive.\n""")
+    with open(out_filename, 'w') as out_file:
+        for i in range(0, 5):
+            for j in range(0, 5):
+                out_file.write(str(a_board.cells[i][j].assign))
+                if j == 4:
+                    out_file.write('\n')
+                    # Insert the newline character at the end of each line
+                else:
+                    out_file.write(' ')
+                    # Insert a space between each number on the line
+
+    out_file.close()
+    return 0
+
+
+def main() -> int:
+    in_filename = input("""Please enter below the input filename, e.g. "Input1.txt". The filename is case-sensitive.\n""")
+    input_return = load_input(in_filename)
+    # load_input returns a list whose first element is the list of 
+    # all cells on the board and second element is the list of constraints 
+    # of all twenty-five cells
+
+    a_board = initialize_board(input_return[0], input_return[1])
+    start_fc(a_board, a_board.cells[0][0])
+    # Once the board has been initialied, apply forward checking once 
+    # before running backtracking
+
+    backtrack(a_board)
+    return 0
+
+
+main()
