@@ -439,6 +439,7 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
                 for j in range(len(current_cell.domain)):
                     if current_cell.domain[j] == a_cell.assign:
                         new_domain.remove(current_cell.domain[j])
+                        break
 
                 current_cell.domain = new_domain
 
@@ -762,12 +763,13 @@ def backtrack(a_board: Board) -> bool:
     selected = select_unassigned_cell(a_board)
     sorted_domain = order_domain_values(selected)
     for i in range(len(sorted_domain)):
+        old_board = copy.deepcopy(a_board)
         if is_consistent(a_board, selected, sorted_domain[i]):
             selected.assign = sorted_domain[i]
             selected.domain = None
-            if start_fc(a_board, selected): return False
-            if backtrack(a_board): return True
-        selected.assign = None
+            if start_fc(a_board, selected):
+                if backtrack(a_board): return True
+        a_board = old_board
     return False
 
 
