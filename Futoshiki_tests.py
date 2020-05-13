@@ -223,16 +223,59 @@ def order_domain_values_test(a_cell: Cell) -> int:
         return 1
 
 
-"""def is_consistent_test(a_board: Board) -> int:
+def is_consistent_test(a_board: Board) -> int:
     print("Applying forward checking to the given board:")
     print("Calling start_fc on the given board...")
-    if not start_fc(a_board):
+    if not start_fc(a_board, a_board.cells[0][0]):
         print("Forward checking succeeded.")
     else:
         print("start_fc returned 1 instead of 0; test terminated.")
         return 1
 
-    selected = select_unassigned_cell(a_board)"""
+    selected = select_unassigned_cell(a_board)
+    print("The cell " + str(selected.coord) + " has been selected as " +
+            "the next variable to be assigned a value.")
+    print("The cell's constraints are: " + str(selected.constr))
+    
+    if not order_domain_values(selected):
+        print("The cell's domain values have been sorted: " +
+                str(selected.domain))
+    
+    for i in range(len(selected.domain)):
+        if is_consistent(a_board, selected, selected.domain[i]):
+            print("The cell would be consistent with the rest of the " +
+                    "assignment if it were assigned " + 
+                    str(selected.domain[i]) + '.')
+        else:
+            print("The cell would be INCONSISTENT with the rest of the " +
+                    "assignment if it were assigned " +
+                    str(selected.domain[i]) + '.')
+
+    others = []
+    for i in range(1,6):
+        if i not in selected.domain: others.append(i)
+        # Compiles a list of integers that are not in the cell's domain
+
+    if len(others) > 0:
+        # If there are values not present in the cell's domain,
+        # call is_consistent on these values to verify the outcomes
+
+        print("\n\nThese values are not in the cell's domain: " +
+                str(others))
+        print("Now calling is_consistent on these values:")
+        for i in range(len(others)):
+            if is_consistent(a_board, selected, others[i]):
+                print("The cell would be consistent with the rest of the " +
+                        "assignment if it were assigned " + 
+                        str(others[i]) + '.')
+            else:
+                print("The cell would be INCONSISTENT with the rest of the " +
+                        "assignment if it were assigned " +
+                        str(others[i]) + '.')
+
+    print("\nTest complete.")
+    return 0
+
 
 #load_input_test()
 #initialize_board_test()
@@ -243,4 +286,6 @@ a_board = initialize_board(initial_state, constr)
 #print_board(a_board)
 #calc_degree_test(a_board)
 #select_unassigned_cell_test(a_board)
-is_complete_test(a_board)
+#is_complete_test(a_board)
+#order_domain_values_test(a_board.cells[0][0])
+is_consistent_test(a_board)
