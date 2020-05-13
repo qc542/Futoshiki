@@ -487,22 +487,6 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
                                 # Remove the values that are smaller 
                                 # than or equal to the origin's 
                                 # assigned value
-                    
-                    else:
-                        # If the origin cell has NOT been assigned 
-                        # a value
-
-                        # The domain list cannot possibly be empty 
-                        # because an empty domain would've made the 
-                        # function return 1 in the very beginning
-                        
-                        dom_min = min(a_cell.domain)
-                        for j in range(len(neighbors[i].domain)):
-                            if neighbors[i].domain[j] <= dom_min:
-                                new_domain.remove(neighbors[i].domain[j])
-                                # Remove the values that are smaller 
-                                # than or equal to the smallest value 
-                                # in the origin's domain
 
                 elif a_cell.constr[i] == constr_strings[i][1]:
                     # constr_strings[i][1] is always the string that
@@ -511,12 +495,6 @@ def forward_checking(a_board: Board, a_cell: Cell, explored: set) -> int:
                     if a_cell.assign != None:
                         for j in range(len(neighbors[i].domain)):
                             if neighbors[i].domain[j] >= a_cell.assign:
-                                new_domain.remove(neighbors[i].domain[j])
-                    
-                    else:
-                        dom_max = max(a_cell.domain)
-                        for j in range(len(neighbors[i].domain)):
-                            if neighbors[i].domain[j] >= dom_max:
                                 new_domain.remove(neighbors[i].domain[j])
 
                 else:
