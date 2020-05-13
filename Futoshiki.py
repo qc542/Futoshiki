@@ -761,15 +761,18 @@ def is_consistent(a_board: Board, a_cell: Cell, value: int) -> bool:
 def backtrack(a_board: Board) -> bool:
     if is_complete(a_board): return True
     selected = select_unassigned_cell(a_board)
+    cell_row = selected.coord[0]
+    cell_col = selected.coord[1]
     sorted_domain = order_domain_values(selected)
     for i in range(len(sorted_domain)):
         old_board = copy.deepcopy(a_board)
+        selected = a_board.cells[cell_row][cell_col]
         if is_consistent(a_board, selected, sorted_domain[i]):
             selected.assign = sorted_domain[i]
             selected.domain = None
-            if start_fc(a_board, selected):
+            if not start_fc(a_board, selected):
                 if backtrack(a_board): return True
-        a_board = old_board
+        a_board = copy.deepcopy(old_board)
     return False
 
 
