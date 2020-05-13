@@ -293,12 +293,27 @@ def backtrack_test(a_board: Board) -> int:
         print("The given board after backtrack returned False is " + 
                 "shown below:")
         print_board(a_board)
+        print("\n\n\nAll assigned values above are displayed in " +
+                "a grid layout below: ")
+        print_board_assign(a_board)
         return 1
 
 
+def print_board_assign(a_board: Board) -> int:
+    """ Prints all assigned value on the board in a grid layout. """
+    for i in range(0, 5):
+        for j in range(0, 5):
+            if a_board.cells[i][j].assign == None:
+                print(0, end=' ')
+            else:
+                print(a_board.cells[i][j].assign, end=' ')
+        print('\n', end='')
+
+    return 0
+
 #load_input_test()
 #initialize_board_test()
-[initial_state, constr] = load_input("Input3.txt")
+[initial_state, constr] = load_input("Input2.txt")
 a_board = initialize_board(initial_state, constr)
 #board_moves_test(a_board)
 #fct_ret = forward_checking_test(a_board)
