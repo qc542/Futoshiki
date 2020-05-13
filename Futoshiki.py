@@ -85,12 +85,14 @@ def load_input(filename: str) -> list:
     line and builds the data structures for the initial state as well as the 
     constraints of inequality."""
     
-    text_stream = io.open(filename, 'r', encoding='utf-8', errors='ignore', newline='\n')
+    text_stream = io.open(filename, 'r', encoding='utf-8', 
+            errors='ignore', newline='\n')
     """ Calls Python's io function to read the file with the specified name."""
 
     initial_state = []
     for i in range(0,5):
-        initial_state.append(list(map(int, text_stream.readline().rstrip().split(' '))))
+        initial_state.append(list(map(int, 
+            text_stream.readline().rstrip().split(' '))))
         """ The rstrip method removes all trailing white space of 
         the string. The split method uses the given character as the 
         delimiter to break down the string and return a list of the 
